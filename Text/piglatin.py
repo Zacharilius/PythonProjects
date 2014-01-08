@@ -35,11 +35,3 @@ class PigLatin:
         if choice is "2": self.translateToPigLatin(word)
 pigLatin = PigLatin()
 pigLatin.main()
-
-"""
-Deque
-while list[0] is in self.cons:
-    pop X letter if consenant
-        add X to back of 
-
-"""
