@@ -24,20 +24,77 @@ class VigenereCipher:
             letterStart += 1
             x += 1
             print string
-    def createPassPhrase(self,word):
-        pass
+        return vigenereTable
+            
+    def createPassPhrase(self,wordToEncodeOrDecode, passPhrase):
+        #creates a passphrase the same length as the word to encode, if necessary
+        count = 0
+        while len(wordToEncodeOrDecode) > len(passPhrase):
+            if count >= len(passPhrase):
+                count = 0
+            passPhrase += passPhrase[count]
+            count += 1
 
-    def encode(self, wordToEncode,passPhrase):
-        if len(wordToEncode) < len(passPhrase):
-            print "Yep"
+        #creates an array of characters in integer representation of the wordToEncode and the passPhrase
+        #Stops encoding if not all letter and returns "Unrecognized input"
+        encodedWord = ""
+        charEncNum=[]
+        charPassNum=[]
+        for letter in wordToEncodeOrDecode:
+            encNum = ord(letter)
+            if encNum < 91 and encNum >= 65:
+                charEncNum.append(encNum)
+            else:
+                return "Unreconized input"
+        for letter in passPhrase:
+            passNum = ord(letter)
+            if passNum < 91 and passNum >= 65:
+                charPassNum.append(passNum)
+            else:
+                return "Unrecognized input"
+        return (charEncNum, charPassNum)
+
+    def encode(self, wordToEncode,passPhrase, vigenereTable):
+        #strips spaces and turns into uppercase
+        wordToEncode = wordToEncode.strip().upper()
+        passPhrase = passPhrase.strip().upper()
+        #prints word to encode and the pass phrase
+        print "Word to encode: " + wordToEncode
+        print "Pass phrase: " + passPhrase
+
+        createPassPhraseOutput = self.createPassPhrase(wordToEncode, passPhrase)
+        charEncNum, charPassNum = createPassPhraseOutput
+
+        #Reference the 2d array aka the vigenere table to encode the word or phrase
+        count = 0
+        encodedOutput = ""
+        while count < len(charEncNum):
+            encodedOutput += vigenereTable[charEncNum[count]-65][charPassNum[count]-65]
+            count += 1
+        return encodedOutput
         
-    def decode(self, wordToDecode, passPhrase):
-        pass
-                
+        
+    def decode(self, wordToDecode, passPhrase, vigenereTable):
+        print "Word to decode: " + wordToDecode
+        print "Pass phrase: " + wordToEncode
+        createPassPhraseOutput = self.createPassPhrase(wordToEncode, passPhrase)
+        
+        count = 0
+        encodedOutput = ""
+        while count < len(charEncNum):
+            encodedOutput += vigenereTable[charEncNum[count]-65][charPassNum[count]-65]
+            count += 1
+        return encodedOutput
+                        
     def __init__(self):
         self.data = []
+        
+    def main(self):
+        vigenereTable = vig.createVigenereTable()
+        encodedWord = vig.encode("nope ", "yep ", vigenereTable)
+        print "Encoded word: " + encodedWord
+        print "Decoded word: " + vig.encode(encodedWord, "yep ", vigenereTable)
 
 
 vig = VigenereCipher()
-vig.createVigenereTable()
-vig.encode("yep", "nope")
+vig.main()
